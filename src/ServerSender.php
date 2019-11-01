@@ -24,7 +24,7 @@ class ServerSender
         }
     }
 
-    protected function send($msg, $type, $to = '')
+    protected function send($msg, $to = '', $type = 'info')
     {
         $this->curl($this->formatMsg($msg, $type), $to);
     }
