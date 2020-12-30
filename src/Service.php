@@ -23,9 +23,16 @@ class Service
      */
     public $webMsgSender;
 
+    /**
+     * @var bool
+     */
+    private $_isWorkVersionLessThan4;
+
     public function __construct()
     {
         $this->webMsgSender = WebMsgSender::getComponent();
+
+        $this->_isWorkVersionLessThan4 = version_compare(Worker::VERSION, '4.0', '<');
 
         $this->socketIo = new SocketIO($this->webMsgSender->socketPort);
         $this->globalData['uidConnectMap'] = [];
@@ -58,9 +65,14 @@ class Service
             // 监听一个http端口
             $innerHttpWorker = new Worker($this->webMsgSender->getPushApiServerUrl());
             // 当http客户端发来数据时触发
-            $innerHttpWorker->onMessage = function (TcpConnection $httpConnection) {
+            $innerHttpWorker->onMessage = function (TcpConnection $httpConnection, $data) {
                 $uidConnectionMap = $this->globalData['uidConnectMap'];
-                $requestParams = $_POST ?: $_GET;
+                if ($this->_isWorkVersionLessThan4) {
+                    $requestParams = $_POST ?: $_GET;
+                } else {
+                    /** @var \Workerman\Protocols\Http\Request $data */
+                    $requestParams = $data->post() ?: $data->get();
+                }
                 // 推送数据的url格式 type=publish&to=uid&content=xxxx
                 $model = new ClientSendModel(['socketIo' => $this->socketIo]);
                 if ($model->load($requestParams, '') && $model->validate()) {
