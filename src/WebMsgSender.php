@@ -38,6 +38,8 @@ class WebMsgSender extends BaseObject
      */
     public $pushApiUrl = 'http://{domain}:{port}/';
     /**
+     * If ServerSender is used in console, this must be config, or config $pushApiUrl
+     * default is $_SERVER['SERVER_NAME']
      * @see getPushApiClientUrl()
      * @var null|string
      */
@@ -54,6 +56,7 @@ class WebMsgSender extends BaseObject
      */
     public $receiveSocketUrl = 'http://{domain}:{port}';
     /**
+     * If sockectIO domain is not like web domain, this must be config, or config $receiveSocketUrl
      * @see getReceiveSocketUrl()
      * @var null|string
      */
