@@ -34,7 +34,7 @@ class Service
 
         $this->_isWorkVersionLessThan4 = version_compare(Worker::VERSION, '4.0', '<');
 
-        $this->socketIo = new SocketIO($this->webMsgSender->socketPort);
+        $this->socketIo = new SocketIO($this->webMsgSender->socketPort, $this->webMsgSender->socketOpts);
         $this->globalData['uidConnectMap'] = [];
         // 客户端发起连接事件时，设置连接socket的各种事件回调
         $this->socketIo->on('connection', function (Socket $socket) {

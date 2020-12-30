@@ -18,6 +18,12 @@ class WebMsgSender extends BaseObject
      */
     public $socketPort = 2120;
     /**
+     * scoketIO 的 options 参数
+     * 在配置 ssl 时有效
+     * @var array
+     */
+    public $socketOpts = [];
+    /**
      * 用于接收推送消息的端口
      * @see getPushApiServerUrl()
      * @see getPushApiClientUrl()
